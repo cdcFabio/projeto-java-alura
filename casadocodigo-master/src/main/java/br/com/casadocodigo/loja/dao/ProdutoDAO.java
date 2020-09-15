@@ -28,6 +28,12 @@ public class ProdutoDAO {
 		return manager.createQuery("select distinct(p) from Produto p join fetch p.precos", Produto.class)
 				.getResultList();
 	}
+	
+	public List<Produto> listar(String data){
+		return manager.createQuery("select distinct(p) from Produto p join fetch p.precos c where year(dataLancamento) = "+data.split("-")[0]
+				 +" and month(dataLancamento) = "+data.split("-")[1]
+				 +" and day(dataLancamento) = "+data.split("-")[2], Produto.class).getResultList();
+	}
 
 	public Produto find(Integer id) {
         return manager.createQuery("select distinct(p) from Produto p join fetch p.precos precos where p.id = :id", 

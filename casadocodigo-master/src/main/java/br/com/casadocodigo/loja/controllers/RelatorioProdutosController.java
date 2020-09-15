@@ -30,15 +30,13 @@ public class RelatorioProdutosController {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 	
-		List<Produto> listar = produtoDao.listar();
+		List<Produto> listar =  data!=null ? produtoDao.listar(data) : produtoDao.listar();
+	
 	    
-		String variavel = objectMapper.writeValueAsString(listar);
+		String listaJson = objectMapper.writeValueAsString(listar);
 		
-		System.out.println(data);
-		
-		
-		
-		return "{ \"dataGeracao\":"+Calendar.getInstance().getTimeInMillis()+", \"quantidade\": "+listar.size()+", \"produtos\":"+variavel+"}";
+	
+		return "{ \"dataGeracao\":"+Calendar.getInstance().getTimeInMillis()+", \"quantidade\": "+listar.size()+", \"produtos\":"+listaJson+"}";
 	 
 		
 	}

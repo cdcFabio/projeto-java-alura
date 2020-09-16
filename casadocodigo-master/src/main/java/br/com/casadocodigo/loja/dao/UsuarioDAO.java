@@ -32,4 +32,25 @@ public class UsuarioDAO implements UserDetailsService{
 	public void gravar(Usuario usuario) {
 		manager.persist(usuario);
 	}
+
+	public List<Usuario> listar() {
+	
+		return manager.createQuery("select u from Usuario u ", Usuario.class)
+				.getResultList();
+	
+	}
+
+	public Usuario buscaPorEmail(String email) {
+
+		List<Usuario> usuarios = manager.createQuery("select u from Usuario u where email = :email", Usuario.class)
+				.setParameter("email", email)
+				.getResultList();
+		
+		if(usuarios.isEmpty())
+			return null;
+		
+		return usuarios.get(0);
+		
+		
+	}
 }

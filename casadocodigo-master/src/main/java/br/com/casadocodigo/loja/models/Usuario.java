@@ -22,6 +22,7 @@ public class Usuario implements UserDetails {
 	@Id
 	private String email;
 	private String senha;
+	private String confirmasenha;
 	private String nome;
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -67,6 +68,14 @@ public class Usuario implements UserDetails {
 		return this.roles;
 	}
 
+
+
+	@Override
+	public String toString() {
+		return "Usuario [email=" + email + ", senha=" + senha + ", confirmasenha=" + confirmasenha + ", nome=" + nome
+				+ ", roles=" + roles + "]";
+	}
+
 	@Override
 	public String getPassword() {
 		return this.senha;
@@ -95,6 +104,14 @@ public class Usuario implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public String getConfirmasenha() {
+		return confirmasenha;
+	}
+
+	public void setConfirmasenha(String confirmasenha) {
+		this.confirmasenha = confirmasenha;
 	}
 	
 }

@@ -26,6 +26,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/pagamento/**").permitAll()	
 			.antMatchers("/usuarios/**").hasRole("ADMIN")	
 			.antMatchers("/usuarios").hasRole("ADMIN")
+			.antMatchers("/usuarios/roles**").hasRole("ADMIN")
 			.antMatchers("/relatorio-produtos").permitAll()	
 			.antMatchers("/pedidos").hasRole("ADMIN")	
 			.antMatchers("/").permitAll()

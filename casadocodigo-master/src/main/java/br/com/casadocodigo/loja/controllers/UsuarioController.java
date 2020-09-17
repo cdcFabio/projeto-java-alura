@@ -1,6 +1,5 @@
 package br.com.casadocodigo.loja.controllers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,103 +28,95 @@ import br.com.casadocodigo.loja.validation.UsuarioValidation;
 @Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
-	
+
 	@Autowired
 	UsuarioDAO usuarioDao;
-	
+
 	@Autowired
 	RoleDAO roleDao;
-	
+
 	@Autowired
 	PasswordEncoder pass;
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.addValidators(new UsuarioValidation());
 	}
-	
+
 	/*********** Lista Usuário *************/
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView listar() {
-		
-		List<Usuario> usuarios = usuarioDao.listar();
+
 		ModelAndView modelAndView = new ModelAndView("usuarios/listaUsuarios");
-		modelAndView.addObject("usuarios", usuarios);
-		
+		modelAndView.addObject("usuarios", usuarioDao.listar());
+
 		return modelAndView;
 	}
-	
+
 	/*********** Grava Usuário *************/
-	@RequestMapping(method=RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	@Transactional
-	public ModelAndView gravar( @Valid Usuario usuario, BindingResult result, 
-			RedirectAttributes redirectAttributes){
-		
-	
-	if(usuarioDao.buscaPorEmail(usuario.getEmail())!=null){
-		result.rejectValue("email", "field.emailcadastrado");
-	}
-	
-	if(result.hasErrors()) {
-		return form(usuario);
-	}
-	
-	usuario.setRoles(Arrays.asList(new Role("ROLE_USER")));
-	
-	/**********************criptografando senha**************************/	
-	usuario.setSenha(pass.encode(usuario.getSenha()));
-	usuario.setConfirmasenha(pass.encode(usuario.getConfirmasenha()));
-	
-	usuarioDao.gravar(usuario);
-	
-	redirectAttributes.addFlashAttribute("message", "Usuario cadastrado com sucesso!");
-	
+	public ModelAndView gravar(@Valid Usuario usuario, BindingResult result, RedirectAttributes redirectAttributes) {
+
+		if (usuarioDao.buscaPorEmail(usuario.getEmail()) != null) {
+			result.rejectValue("email", "field.emailcadastrado");
+		}
+
+		if (result.hasErrors()) {
+			return form(usuario);
+		}
+
+		usuario.setRoles(Arrays.asList(new Role("ROLE_USER")));
+
+		/********************** criptografando senha **************************/
+		usuario.setSenha(pass.encode(usuario.getSenha()));
+		usuario.setConfirmasenha(pass.encode(usuario.getConfirmasenha()));
+
+		usuarioDao.gravar(usuario);
+
+		redirectAttributes.addFlashAttribute("message", "Usuario cadastrado com sucesso!");
+
 		return new ModelAndView("redirect:/usuarios");
 	}
-	
+
 	/*********** Formulário para cadastro de Usuário *************/
 	@RequestMapping("/form")
 	public ModelAndView form(Usuario usuario) {
-		
+
 		return new ModelAndView("usuarios/usuarioForm");
 	}
-	
+
 	/*********** Carrega permissões Usuário *************/
-	@RequestMapping("/roles")
-	public ModelAndView roles(@RequestParam (required = true)String email) {
-		
+	@RequestMapping(value = "/roles", method = RequestMethod.GET)
+	public ModelAndView roles(@RequestParam(required = true) String email, RedirectAttributes redirectAttributes) {
+
 		Usuario user = usuarioDao.buscaPorEmail(email);
-		if(user==null)
-			System.out.println("Usuario não encontrado com o e-mail "+email);
+		if (user == null) {
+			redirectAttributes.addFlashAttribute("message", "Usuario não encontrado com o e-mail = "+email);
+			return new ModelAndView("redirect:/usuarios");
+		}
+
 		ModelAndView modelAndView = new ModelAndView("usuarios/alteraRole");
-		
-		modelAndView.addObject("usuario",user);
-		
-		List<String> regras = new ArrayList<String>();
-		
-		roleDao.listar().forEach(roles -> regras.add(roles.getNome()) );
-		
-		modelAndView.addObject("lista",regras);
-		
+
+		modelAndView.addObject("usuario", user);
+
+		modelAndView.addObject("lista", roleDao.listar());
+
 		return modelAndView;
 	}
-	
+
 	/*********** Altera permissões Usuário *************/
-	
-	@RequestMapping(value="/roles", method=RequestMethod.POST )
+
+	@RequestMapping(value = "/roles", method = RequestMethod.POST)
 	@Transactional
-	public ModelAndView alterar(@ModelAttribute ("usuario") Usuario user,String email)
-	{
+	public ModelAndView alterar(@ModelAttribute("usuario") Usuario user, String email) {
+		
 		Usuario usuarioAtual = usuarioDao.buscaPorEmail(email);
-		
 		usuarioAtual.setRoles(user.getRoles());
-		//System.out.println("Dados do usuario"+usuarioAtual+"O email capturado é = "+email);
-		
 		usuarioDao.gravar(usuarioAtual);
+
 		return new ModelAndView("redirect:/usuarios");
-		
+
 	}
-
-
 
 }

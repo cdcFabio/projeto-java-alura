@@ -5,6 +5,8 @@
 
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
 
+<c:url value="/" var="contextPath" />
+
 <tags:pageTemplate titulo="Lista de Usuários">
 
 	<c:url value="/resources/css" var="cssPath" />
@@ -37,7 +39,9 @@
 					<td>${usuario.email }</td>
 					<td>${usuario.roles}</td>
 					<td><a href="${s:mvcUrl('UC#roles').arg(0, usuario.email).build() }">
-						Icone</a>
+						<input type="image" src="${contextPath }resources/imagens/adicionar.png" 
+									alt="Alterar" title="Alterar" />
+						</a>
 					</td>
 				</tr>
 			</c:forEach>

@@ -6,6 +6,8 @@
 
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
 
+
+
 <tags:pageTemplate titulo="Lista de Usuários">
 
 	<c:url value="/resources/css" var="cssPath" />

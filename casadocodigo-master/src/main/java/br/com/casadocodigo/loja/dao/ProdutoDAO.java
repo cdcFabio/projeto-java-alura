@@ -30,9 +30,7 @@ public class ProdutoDAO {
 	}
 	
 	public List<Produto> listar(String data){
-		return manager.createQuery("select distinct(p) from Produto p join fetch p.precos c where year(dataLancamento) = "+data.split("-")[0]
-				 +" and month(dataLancamento) = "+data.split("-")[1]
-				 +" and day(dataLancamento) = "+data.split("-")[2], Produto.class).getResultList();
+		return manager.createQuery("select distinct(p) from Produto p join fetch p.precos c where dataLancamento >= '"+data+"'",Produto.class).getResultList();
 	}
 
 	public Produto find(Integer id) {

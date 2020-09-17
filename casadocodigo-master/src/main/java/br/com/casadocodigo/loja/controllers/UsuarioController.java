@@ -55,8 +55,9 @@ public class UsuarioController {
 	/*********** Grava Usuário *************/
 	@RequestMapping(method = RequestMethod.POST)
 	@Transactional
-	public ModelAndView gravar(@Valid Usuario usuario, BindingResult result, RedirectAttributes redirectAttributes) {
+	public ModelAndView gravar(@Valid Usuario usuario ,BindingResult result, RedirectAttributes redirectAttributes) {
 
+		
 		if (usuarioDao.buscaPorEmail(usuario.getEmail()) != null) {
 			result.rejectValue("email", "field.emailcadastrado");
 		}
@@ -90,11 +91,14 @@ public class UsuarioController {
 	public ModelAndView roles(@RequestParam(required = true) String email, RedirectAttributes redirectAttributes) {
 
 		Usuario user = usuarioDao.buscaPorEmail(email);
+		
 		if (user == null) {
 			redirectAttributes.addFlashAttribute("message", "Usuario não encontrado com o e-mail = "+email);
 			return new ModelAndView("redirect:/usuarios");
 		}
 
+	   
+		
 		ModelAndView modelAndView = new ModelAndView("usuarios/alteraRole");
 
 		modelAndView.addObject("usuario", user);

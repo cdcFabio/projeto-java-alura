@@ -28,12 +28,12 @@
 			</div>
 			<div class="form-group">
 				<label>Senha</label>
-				<form:input path="senha" cssClass="form-control" />
+				<form:input path="senha" type="password" cssClass="form-control" />
 				<form:errors path="senha" />
 			</div>
 			<div class="form-group">
 				<label>Senha repetida</label>
-				<form:input path="confirmasenha" cssClass="form-control" />
+				<form:input path="confirmasenha" type="password" cssClass="form-control" />
 				<form:errors path="confirmasenha" />
 			</div>
 			<button type="submit" class="btn btn-primary">Cadastrar</button>

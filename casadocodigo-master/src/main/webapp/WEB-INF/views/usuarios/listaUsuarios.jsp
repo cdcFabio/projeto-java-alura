@@ -12,6 +12,7 @@
 
 	<section id="index-section" class="container middle">
 		
+		
 		<a href="${s:mvcUrl('UC#form').build() }" rel="nofollow">
 			<h1>Novo usuário</h1>
 		</a> 
@@ -19,15 +20,25 @@
 	
 		<h1>Lista de Usuarios</h1>
 		<br>
+		
+		
+		<br>
 		<table class="table table-bordered table-striped table-hover">
 			<tr>
 				<th>Nome</th>
 				<th>Email</th>
+				<th>Roles</th>
+				<th></th>
 			</tr>
+				
 			<c:forEach items="${usuarios }" var="usuario">
 				<tr>
 					<td>${usuario.nome }</td>
 					<td>${usuario.email }</td>
+					<td>${usuario.roles}</td>
+					<td><a href="${s:mvcUrl('UC#roles').arg(0, usuario.email).build() }">
+						Icone</a>
+					</td>
 				</tr>
 			</c:forEach>
 		</table>
